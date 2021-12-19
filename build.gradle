@@ -1,0 +1,66 @@
+import me.rancraftplayz.pacifist.remapper.RemapperPlugin
+
+buildscript {
+    dependencies{
+        classpath files('plugins/pacifist-remapper-0.2.jar')
+    }
+}
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+}
+apply plugin: RemapperPlugin
+
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://repo.spongepowered.org/maven' }
+    maven { url = "https://maven.elmakers.com/repository/" }
+    mavenLocal()
+}
+
+configurations {
+    shade // The things to put in the shadowJar
+    implementation.extendsFrom remapLib // Make the remapLib show up as a dependency
+    implementation.extendsFrom shade // Make the shaded stuff show up as a dependency
+    accessWidenerLib.extendsFrom implementation // Make so the access wideners will be applied to all implemented dependencies
+}
+
+dependencies {
+    // Ignite & Spigot
+    remapLib "org.spigotmc:spigot:${project.spigot_version}:remapped-mojang"
+    accessWidener fileTree(dir: 'src/main/resources', include: ['*.accesswidener']) // This doesn't support multiple access wideners
+    implementation "space.vectrix.ignite:ignite-api:${project.ignite_version}"
+    implementation "org.spongepowered:mixin:${project.mixin_version}"
+
+    // Dependencies (You can put the dependencies in the jar by using the shade configuration)
+      // Example: shade "com.google.code.gson:gson:2.8.9"
+}
+
+spigot {
+    version = project.minecraft_version
+}
+
+
+
+// You usually don't need to change anything below this line
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("ignite.mod.json") {
+        expand "version": project.version
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.getByName("shade")]
+    classifier ''
+    mergeServiceFiles()
+}
+jar.finalizedBy(shadowJar)
+shadowJar.finalizedBy(remapJar)

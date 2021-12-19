@@ -1,0 +1,3 @@
+# Remember to do the task applyAccessWidener everytime you change this file so that it'll apply the access wideners
+accessWidener v1 mojang
+accessible class net/minecraft/server/level/ServerChunkCache$MainThreadExecutor

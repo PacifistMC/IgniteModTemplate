@@ -1,0 +1,14 @@
+{
+  "id": "example",
+  "version": "${version}",
+  "entry": "org.example.ignite.ExampleMod",
+  "dependencies": [
+    "ignite"
+  ],
+  "mixins": [
+    "mixins.example.json"
+  ],
+  "access_widener": [
+    "example-obf.accesswidener"
+  ]
+}
