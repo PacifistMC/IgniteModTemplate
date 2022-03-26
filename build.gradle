@@ -1,16 +1,8 @@
-import me.rancraftplayz.pacifist.remapper.RemapperPlugin
-
-buildscript {
-    dependencies{
-        classpath files('plugins/pacifist-remapper-0.2.jar')
-    }
-}
-
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id "io.github.rancraftplayz.remapper" version "1.0.2"
 }
-apply plugin: RemapperPlugin
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
